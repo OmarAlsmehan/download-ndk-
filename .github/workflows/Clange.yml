@@ -1,0 +1,33 @@
+name: download-clang-release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  download-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install aria2
+        run: sudo apt-get update && sudo apt-get install -y aria2
+
+      - name: Download Clang r563880c
+        run: |
+          aria2c \
+            -x 16 \
+            -s 16 \
+            -k 1M \
+            https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/mirror-goog-main-llvm-toolchain-source/clang-r563880c.tar.gz \
+            -o clang-r563880c.tar.gz
+
+      - name: Create Release and Upload
+        uses: ncipollo/release-action@v1
+        with:
+          tag: "clang-r563880c-${{ github.run_number }}"
+          name: "Clang r563880c #${{ github.run_number }}"
+          artifacts: "clang-r563880c.tar.gz"
+          draft: false
+          prerelease: false
