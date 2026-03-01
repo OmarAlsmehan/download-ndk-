@@ -3,6 +3,9 @@ name: download-ndk-release
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write   # ⭐ هذا هو الحل
+
 jobs:
   download-and-release:
     runs-on: ubuntu-latest
@@ -10,7 +13,7 @@ jobs:
     steps:
       - name: Download NDK with curl
         run: |
-          curl -L \
+          curl -L --fail --retry 5 --retry-delay 5 \
             -o android-ndk-r17c-linux-x86_64.zip \
             https://dl.google.com/android/repository/android-ndk-r17c-linux-x86_64.zip
 
