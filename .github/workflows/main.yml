@@ -8,24 +8,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Download NDK r17c
+      - name: Download NDK
         run: |
-          wget -O android-ndk-r17c-linux-x86_64.zip https://dl.google.com/android/repository/android-ndk-r17c-linux-x86_64.zip
+          wget -O android-ndk-r17c-linux-x86_64.zip \
+          https://dl.google.com/android/repository/android-ndk-r17c-linux-x86_64.zip
 
       - name: Create Release
-        id: create_release
         uses: ncipollo/release-action@v1
         with:
           tag: "ndk-r17c-${{ github.run_number }}"
-          name: "NDK r17c Build #${{ github.run_number }}"
+          name: "NDK r17c #${{ github.run_number }}"
+          artifacts: "android-ndk-r17c-linux-x86_64.zip"
           draft: false
           prerelease: false
-          token: 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  # التوكن مؤقت مباشرة في السكربت
-
-      - name: Upload NDK to Release
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: android-ndk-r17c-linux-x86_64.zip
-          asset_name: android-ndk-r17c-linux-x86_64.zip
-          asset_content_type: application/zip
